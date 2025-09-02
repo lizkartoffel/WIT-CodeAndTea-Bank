@@ -1,16 +1,23 @@
-from transactions.transfer import transfer
-from transactions.withdraw import withdraw
-from transactions.deposit import deposit
+from transactions.deposit import Deposit
+from transactions.withdraw import Withdraw
+from transactions.transfer import Transfer
 
 class Management:
-    def transaction_type(bankobj, method, amount=None, receiver_email=None):
+    @staticmethod
+
+#so that it can be called without creating an obj m=Managment().. m.transaction_type(..) 
+#it doesnt care about instance (self) only if the user is inputing the correct action 
+# in other words it doesnt need an instance (makes code cleaner in main)
+
+
+    def transaction_type(user_account, method, amount=None, recipient=None):
         if method.lower() == "deposit":
-            return deposit(bankobj).Deposit(amount)
+            return Deposit(user_account).Deposit(amount)
         elif method.lower() == "withdraw":
-            return withdraw(bankobj).Withdraw(amount)
+            return Withdraw(user_account).Withdraw(amount)
         elif method.lower() == "transfer":
-            return transfer(bankobj).Transfer(amount, receiver_email)
+            return Transfer(user_account).Transfer(amount, recipient)
         else:
-            return 
+            return "Unknown Method"
         
  

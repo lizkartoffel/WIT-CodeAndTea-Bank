@@ -1,12 +1,9 @@
-class deposit:
-    def __init__(self, bankobj):
-        self.user=bankobj.user
-        
+class Deposit:
+    def __init__(self, account):
+        self.account = account
+
     def Deposit(self, amount):
-
-
-        if amount<250:
-            return "Message: Failed Attempt.. Minimum deposit amount (250).."
        
-        self.user["Balance"]+=amount
-        return f"Name: {self.user["Name"]} | New Balanace: {self.user["Balance"]} | Deposited ({amount}).."
+        self.account.Balance += amount
+        return f"Deposit successful! New Balance: {self.account.Balance} IQD"
+                

@@ -1,14 +1,8 @@
-class withdraw:
-    def __init__(self, bankobj):
-        self.user=bankobj.user
+class Withdraw:
+    def __init__(self, account):
+        self.account = account
 
     def Withdraw(self, amount):
-
-            if self.user["Balance"]<amount:
-                return "Message: Insufficient Funds! Unable To Withdraw"
-        
-            if amount<250:
-                return "Message: Failed Attempt.. Minimum withdraw amount (250).."
-        
-            self.user["Balance"]-=amount
-            return f"Name: {self.user["Name"]} | New Balanace: {self.user["Balance"]} | Withdrew ({amount}).."
+  
+        self.account.Balance -= amount
+        return f"Withdraw successful! New Balance: {self.account.Balance} IQD"
