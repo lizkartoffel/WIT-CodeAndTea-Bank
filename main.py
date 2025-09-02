@@ -67,8 +67,13 @@ def main():
                 if amount is None:
                     print("Action cancelled. Returning to menu...")
                     continue
-                print(Management.transaction_type(user_account, "withdraw", amount))
-                History(user_account, amount=amount, transaction_type="withdraw") #Calls history to add after the action
+                balance, result_mssg = Management.transaction_type(user_account, "withdraw", amount)
+        
+                if balance is None:
+                    print(result_mssg)  #failed withdrawal, dont add to history (return none)
+                else:
+                    print(result_mssg)  #success
+                    History(user_account, amount=amount, transaction_type="withdraw")  #add to history only if successful
 
 
             elif action == "t":
@@ -76,18 +81,30 @@ def main():
                 if amount is None:
                     print("Action cancelled. Returning to menu...")
                     continue
-                recipient_acc_num = input(">>> Enter recipient account number   ||   Press (R) to Return: ") 
-                recipient_account = Customer_Accounts.get(recipient_acc_num)
 
-                if recipient_account is None or recipient_acc_num.lower() == "r":
-                    print("Action cancelled or recipient not found. Returning to menu...")
-                    continue
+                while True:  # loop until valid recipient or cancel
+                    recipient_acc_num = input(">>> Enter recipient account number   ||   Press (R) to Return: ")
 
-                result = Management.transaction_type(user_account, "transfer", amount, recipient_acc_num)
-                if result is not None:
-                    print(result)
-                    History(user_account, recipient_account, amount, transaction_type="transfer") #Calls history to add after the action
+                    result = Management.transaction_type(user_account, "transfer", amount, recipient_acc_num)
 
+                    if result == "Action cancelled. Returning to menu...":
+                        print(result)
+                        break
+                    elif result == "Insufficient funds!":
+                        print(result)
+                        break
+
+                    elif result in ["Recipient Not Found. Please try again.", #transfer func error msgs
+                        "Enter numbers only!",
+                        "Cannot transfer to the same account."]:
+                        print(result)
+                        continue # keep asking unless user exits or enters correct info
+                     
+                    if result is not None:
+                        print(result)
+                        History(user_account, Customer_Accounts.get(recipient_acc_num), amount, transaction_type="transfer")
+                    break
+                        
 
             elif action == "h":
                 if user_account.History:  # check if there are any transactions
@@ -109,19 +126,3 @@ def main():
                 print("Unknown Action!")
 if __name__ == "__main__":
     main()
-
-
-    """            elif action == "t":
-                amount = get_valid_amount(">>> Enter transfer amount (multiples of 250 IQD)   ||   Press (R) to Return: ")
-                if amount is None:
-                    print("Action cancelled. Returning to menu...")
-                    continue
-                recipient = input(">>> Enter recipient account number   ||   Press (R) to Return: ") 
-                if amount is None:
-                    print("Action cancelled. Returning to menu...")
-                    continue
-                result = Management.transaction_type(user_account, "transfer", amount, recipient) #store value in a new var
-                if result is not None:   #to ONLY print if transfer was successful
-                    print(result)
-                    History(user_account, recipient_account, amount=amount, transaction_type="transfer") #Calls history to add after the action
-"""
